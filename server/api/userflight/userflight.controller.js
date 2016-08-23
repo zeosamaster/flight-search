@@ -13,6 +13,9 @@
 import jsonpatch from 'fast-json-patch';
 import Userflight from './userflight.model';
 
+var rp = require('request-promise');
+var when = require('when');
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function (entity) {
@@ -121,12 +124,86 @@ export function patch(req, res) {
 
 // Deletes a Userflight from the DB
 export function destroy(req, res) {
-  debugger;
   return Userflight.findOneAndRemove({
     _id: req.params.id,
     user: req.user._id
   }).exec()
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
+    .catch(handleError(res));
+}
+
+function getMomondoSearch(res) {
+  return function (userflight) {
+    var d = when.defer();
+    rp('http://www.momondo.co.uk/api/3.0/FlightSearch', {
+      method: 'POST',
+      body: {
+        "AdultCount": userflight.passengers,
+        "ChildAges": [],
+        "Culture": "en-GB",
+        "DirectOnly": false,
+        "IncludeNearby": false,
+        "Market": "",
+        "Mix": "Segments",
+        "Segments": [{
+          "Depart": userflight.departure_date,
+          "Departure": userflight.departure_date,
+          "Destination": userflight.to,
+          "Origin": userflight.from
+        }, {
+            "Depart": userflight.arrival_date,
+            "Departure": userflight.arrival_date,
+            "Destination": userflight.from,
+            "Origin": userflight.to
+          }],
+        "TicketClass": "ECO"
+      },
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Cookie': 'Currency1=EUR'
+      },
+      json: true
+    }).then((response) => {
+      d.resolve({
+        EngineId: response.EngineId,
+        SearchId: response.SearchId
+      });
+    }, () => {
+      console.error(arguments);
+      d.reject();
+    });
+    return d.promise;
+  };
+}
+
+function searchMomondo(res) {
+  return function (params) {
+    var d = when.defer();
+    rp('http://www.momondo.co.uk/api/3.0/FlightSearch/' + params.SearchId + '/' + params.EngineId + '/true', {
+      headers: {
+        'Cookie': 'Currency1=EUR'
+      },
+    })
+      .then((response) => {
+        d.resolve(response);
+        res.writeHead(200, {"Content-Type": "application/json"});
+        res.end(response);
+      }, () => {
+        console.error(arguments);
+        d.reject();
+      });
+    return d.promise;
+  };
+}
+
+export function search(req, res) {
+  return Userflight.findOne({
+    _id: req.params.id,
+    user: req.user._id
+  }).exec()
+    .then(handleEntityNotFound(res))
+    .then(getMomondoSearch(res))
+    .then(searchMomondo(res))
     .catch(handleError(res));
 }

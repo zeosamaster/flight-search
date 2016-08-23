@@ -44,6 +44,15 @@ export class UserflightComponent {
     }
   }
 
+  search(userflight) {
+    if (userflight && userflight._id) {
+      this.$http.get('/api/userflights/search/' + userflight._id).then((response) => {
+        console.log(response);
+        debugger;
+      });
+    }
+  }
+
   edit(userflight) {
     this.userflight = angular.extend({}, userflight);
   }
