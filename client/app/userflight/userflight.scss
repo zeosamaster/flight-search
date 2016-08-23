@@ -1,0 +1,40 @@
+.userflights {
+    
+    .userflight  {
+        display: inline-block;
+        border: 1px solid lightgrey;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10px;
+
+        .field {
+            display: inline-block;
+        }
+            
+        .info {
+            width: 100%;
+        }
+
+        .from {
+            width: 50%;
+        }
+
+        .to {
+            width: 50%;
+        }
+
+        .departure_date {
+            width: 50%;
+        }
+
+        .arrival_date {
+            width: 50%;
+        }
+
+        .passengers {
+            width: 100%;
+        }
+
+    }
+    
+}
