@@ -1,6 +1,10 @@
 {
     "extends": "../.eslintrc",
     "env": {
-        "node": true
+        "node": true,
+        "jasmine": true
+    },
+    "globals": {
+        "sinon": true
     }
 }

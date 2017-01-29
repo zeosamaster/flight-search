@@ -41,7 +41,7 @@ export class AirportComponent {
     }
 
     getAirports() {
-        return this.$http.get('/api/airports')
+        return this.$http.post('/api/airports/reseed')
             .then(response => {
                 this.airports = response.data.results;
                 this.filterAirports();
