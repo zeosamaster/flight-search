@@ -1,0 +1,54 @@
+<div class="col-xs-12 col-sm-12 col-lg-12 airports">
+    <h2>Airports</h2>
+
+    <form>
+        <div class="country-search form-group col-xs-12 col-sm-12 col-lg-4">
+            <h4>Country</h4>
+            <input type="text" class="form-control" name="country" placeholder="Country" ng-model="airportCtrl.country" ng-change="airportCtrl.filterCountries()" />
+            <ul class="list-group search-results countries">
+                <li class="list-group-item country" ng-repeat="country in airportCtrl.displayCountries" ng-click="airportCtrl.filterCountries(country.name)">
+                    <span ng-bind="country.name"></span>
+                    <span class="pull-right">
+                        <span class="btn btn-xs btn-default" ng-click="airportCtrl.addedCountries[country.name] = !airportCtrl.addedCountries[country.name]">
+                            <span ng-hide="airportCtrl.addedCountries[country.name]" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            <span ng-show="airportCtrl.addedCountries[country.name]" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="city-search form-group col-xs-12 col-sm-12 col-lg-4">
+            <h4>Cities</h4>
+            <input type="text" class="form-control" name="city" placeholder="City" ng-model="airportCtrl.city" ng-change="airportCtrl.filterCities()" />
+            <ul class="list-group search-results cities">
+                <li class="list-group-item city" ng-repeat="city in airportCtrl.displayCities" ng-click="airportCtrl.filterCities(city.name)">
+                    <span ng-bind="city.name"></span>
+                    <span class="pull-right">
+                        <span class="btn btn-xs btn-default" ng-click="airportCtrl.addedCities[city.name] = !airportCtrl.addedCities[city.name]">
+                            <span ng-hide="airportCtrl.addedCities[city.name]" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            <span ng-show="airportCtrl.addedCities[city.name]" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="airport-search form-group col-xs-12 col-sm-12 col-lg-4">
+            <h4>Airports</h4>
+            <input type="text" class="form-control" name="airport" placeholder="Airport" ng-model="airportCtrl.airport" ng-change="airportCtrl.filterAirports()" />
+            <ul class="list-group search-results airports">
+                <li class="list-group-item airport" ng-repeat="airport in airportCtrl.displayAirports" ng-click="airportCtrl.filterAirports(airport.name)">
+                    <span ng-bind="airport.name + ' (' + airport.code + ')'"></span>
+                    <span class="pull-right">
+                        <span class="btn btn-xs btn-default" ng-click="airportCtrl.addedAirports[airport.name] = !airportCtrl.addedAirports[airport.name]">
+                            <span ng-hide="airportCtrl.addedAirports[airport.name]" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            <span ng-show="airportCtrl.addedAirports[airport.name]" class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                        </span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+    </form>
+
+</div>

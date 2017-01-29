@@ -14,7 +14,7 @@ import uiBootstrap from 'angular-ui-bootstrap';
 
 
 import {
-  routeConfig
+    routeConfig
 } from './app.config';
 
 import _Auth from '../components/auth/auth.module';
@@ -28,6 +28,7 @@ import util from '../components/util/util.module';
 import socket from '../components/socket/socket.service';
 
 import userflight from './userflight/userflight.component';
+import airport from './airport/airport.component';
 
 import './app.scss';
 
@@ -37,25 +38,27 @@ angular.module('flightSearchApp', [
     // ngMessages,
 
     // ngValidationMatch,
-    _Auth, account, admin, navbar, footer, main, constants, socket, util, userflight
-  ])
-  .config(routeConfig)
-  .run(function($rootScope, $location, Auth) {
-    'ngInject';
-    // Redirect to login if route requires auth and you're not logged in
+    _Auth, account, admin, navbar, footer, main, constants, socket, util,
 
-    $rootScope.$on('$stateChangeStart', function(event, next) {
-      Auth.isLoggedIn(function(loggedIn) {
-        if (next.authenticate && !loggedIn) {
-          $location.path('/login');
-        }
-      });
+    userflight, airport
+])
+    .config(routeConfig)
+    .run(($rootScope, $location, Auth) => {
+        'ngInject';
+        // Redirect to login if route requires auth and you're not logged in
+
+        $rootScope.$on('$stateChangeStart', (event, next) => {
+            Auth.isLoggedIn(loggedIn => {
+                if (next.authenticate && !loggedIn) {
+                    $location.path('/login');
+                }
+            });
+        });
     });
-  });
 
 angular.element(document)
-  .ready(() => {
-    angular.bootstrap(document, ['flightSearchApp'], {
-      strictDi: true
+    .ready(() => {
+        angular.bootstrap(document, ['flightSearchApp'], {
+            strictDi: true
+        });
     });
-  });
